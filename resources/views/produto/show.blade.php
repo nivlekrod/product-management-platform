@@ -11,7 +11,7 @@
         <!-- Header com breadcrumb e ações -->
         <div class="mb-6">
             <nav class="flex items-center text-sm text-gray-600 mb-4">
-                <a href="{{ route('produtos.index') }}" class="hover:text-blue-600 transition-colors">Produtos</a>
+                <a href="{{ route('produto.index') }}" class="hover:text-blue-600 transition-colors">Produtos</a>
                 <svg class="w-4 h-4 mx-2" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
                 </svg>
@@ -24,13 +24,13 @@
                     <p class="text-gray-600">Produto ID: <span class="font-medium text-gray-900">#{{ $produto->id }}</span></p>
                 </div>
                 <div class="flex gap-3">
-                    <a href="{{ route('produtos.edit', $produto->id) }}" class="inline-flex items-center px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-all duration-200 shadow-md hover:shadow-lg">
+                    <a href="{{ route('produto.edit', $produto->id) }}" class="inline-flex items-center px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-all duration-200 shadow-md hover:shadow-lg">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                         </svg>
                         Editar
                     </a>
-                    <form action="{{ route('produtos.destroy', $produto->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este produto?');">
+                    <form action="{{ route('produto.destroy', $produto->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este produto?');">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="inline-flex items-center px-5 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium transition-all duration-200 shadow-md hover:shadow-lg">

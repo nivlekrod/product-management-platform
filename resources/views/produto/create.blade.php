@@ -12,7 +12,7 @@
             <!-- Header -->
             <div class="flex items-center justify-between mb-6">
                 <h1 class="text-3xl font-bold text-gray-800">Cadastrar Novo Produto</h1>
-                <a href="{{ route('produtos.index') }}" class="text-gray-600 hover:text-gray-900 transition duration-150 flex items-center gap-2">
+                <a href="{{ route('produto.index') }}" class="text-gray-600 hover:text-gray-900 transition duration-150 flex items-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                     </svg>
@@ -40,7 +40,7 @@
             @endif
 
             <!-- Form -->
-            <form action="{{ route('produtos.store') }}" method="POST" class="space-y-6">
+            <form action="{{ route('produto.store') }}" method="POST" class="space-y-6">
                 @csrf
 
                 <!-- Nome do Produto -->
@@ -153,7 +153,7 @@
                     </button>
                     
                     <a 
-                        href="{{ route('produtos.index') }}"
+                        href="{{ route('produto.index') }}"
                         class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-2"
                     >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

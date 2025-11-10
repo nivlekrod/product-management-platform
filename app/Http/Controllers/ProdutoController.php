@@ -41,7 +41,7 @@ class ProdutoController extends Controller
             
             $produto->save();
 
-            return redirect()->route('produtos.index')->with('success', 'Produto já existente, estoque atualizado com sucesso.');
+            return redirect()->route('produto.index')->with('success', 'Produto já existente, estoque atualizado com sucesso.');
         }
 
         Produto::create([
@@ -51,7 +51,7 @@ class ProdutoController extends Controller
             'quantidade' => $request->quantidade,
         ]);
 
-        return redirect()->route('produtos.index')->with('success', 'Produto criado com sucesso.');
+        return redirect()->route('produto.index')->with('success', 'Produto criado com sucesso.');
     }
 
     /**
@@ -82,7 +82,7 @@ class ProdutoController extends Controller
             'quantidade' => $request->quantidade,
         ]);
 
-        return redirect()->route('produtos.index')->with('success', 'Produto atualizado com sucesso.');
+        return redirect()->route('produto.index')->with('success', 'Produto atualizado com sucesso.');
     }
 
     /**
@@ -93,9 +93,9 @@ class ProdutoController extends Controller
         $deletado = $produto->delete();
         
         if (!$deletado) {
-            return redirect()->route('produtos.index')->with('error', 'Erro ao deletar o produto.');
+            return redirect()->route('produto.index')->with('error', 'Erro ao deletar o produto.');
         }
         
-        return redirect()->route('produtos.index')->with('success', 'Produto deletado com sucesso.');
+        return redirect()->route('produto.index')->with('success', 'Produto deletado com sucesso.');
     }
 }
