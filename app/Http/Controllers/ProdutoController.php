@@ -82,6 +82,10 @@ class ProdutoController extends Controller
             'quantidade' => $request->quantidade,
         ]);
 
+        if (!$produto) {
+            return redirect()->route('produto.index')->with('error', 'Erro ao atualizar o produto.');
+        }
+        
         return redirect()->route('produto.index')->with('success', 'Produto atualizado com sucesso.');
     }
 
