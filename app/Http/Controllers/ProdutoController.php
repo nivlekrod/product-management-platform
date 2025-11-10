@@ -59,7 +59,7 @@ class ProdutoController extends Controller
      */
     public function show(Produto $produto)
     {
-        //
+        return view('produto.show', ['produto' => $produto]);
     }
 
     /**
@@ -67,7 +67,7 @@ class ProdutoController extends Controller
      */
     public function edit(Produto $produto)
     {
-        //
+        return view('produto.edit', ['produto' => $produto]);
     }
 
     /**
@@ -75,7 +75,14 @@ class ProdutoController extends Controller
      */
     public function update(Request $request, Produto $produto)
     {
-        //
+        $produto->update([
+            'nome' => $request->nome,
+            'descricao' => $request->descricao,
+            'preco' => $request->preco,
+            'quantidade' => $request->quantidade,
+        ]);
+
+        return redirect()->route('produtos.index')->with('success', 'Produto atualizado com sucesso.');
     }
 
     /**
@@ -83,6 +90,12 @@ class ProdutoController extends Controller
      */
     public function destroy(Produto $produto)
     {
-        //
+        $deletado = $produto->delete();
+        
+        if (!$deletado) {
+            return redirect()->route('produtos.index')->with('error', 'Erro ao deletar o produto.');
+        }
+        
+        return redirect()->route('produtos.index')->with('success', 'Produto deletado com sucesso.');
     }
 }
