@@ -75,8 +75,11 @@ class ProdutoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Produto $produto)
+    public function show(Request $request, Produto $produto)
     {
+        if ($request->ajax() || $request->wantsJson()) {
+            return view('produto.show-content', ['produto' => $produto]);
+        }
         return view('produto.show', ['produto' => $produto]);
     }
 
