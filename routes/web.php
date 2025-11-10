@@ -3,8 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProdutoController;
 
-Route::get('/', [ProdutoController::class, 'index'])->name('produto.index');
 Route::get('/produtos', [ProdutoController::class, 'index'])->name('produto.index');
+Route::redirect('/', '/produtos');
 
 Route::get('/produtos/create', [ProdutoController::class, 'create'])->name('produto.create');
 Route::post('/produtos', [ProdutoController::class, 'store'])->name('produto.store');
