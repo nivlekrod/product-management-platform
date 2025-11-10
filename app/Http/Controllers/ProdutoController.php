@@ -18,6 +18,15 @@ class ProdutoController extends Controller
     }
 
     /**
+     * Return products list as JSON for AJAX requests.
+     */
+    public function list()
+    {
+        $produtos = Produto::orderBy('id', 'desc')->get();
+        return response()->json(['produtos' => $produtos]);
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create(Request $request)
