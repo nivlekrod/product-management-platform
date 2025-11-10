@@ -20,8 +20,11 @@ class ProdutoController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
+        if ($request->ajax() || $request->wantsJson()) {
+            return view('produto.create-form');
+        }
         return view('produto.create');
     }
 
@@ -41,6 +44,9 @@ class ProdutoController extends Controller
             
             $produto->save();
 
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => true, 'message' => 'Produto já existente, estoque atualizado com sucesso.']);
+            }
             return redirect()->route('produto.index')->with('success', 'Produto já existente, estoque atualizado com sucesso.');
         }
 
@@ -51,6 +57,9 @@ class ProdutoController extends Controller
             'quantidade' => $request->quantidade,
         ]);
 
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Produto criado com sucesso.']);
+        }
         return redirect()->route('produto.index')->with('success', 'Produto criado com sucesso.');
     }
 
@@ -65,8 +74,11 @@ class ProdutoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Produto $produto)
+    public function edit(Request $request, Produto $produto)
     {
+        if ($request->ajax() || $request->wantsJson()) {
+            return view('produto.edit-form', ['produto' => $produto]);
+        }
         return view('produto.edit', ['produto' => $produto]);
     }
 
@@ -83,23 +95,35 @@ class ProdutoController extends Controller
         ]);
 
         if (!$produto) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => 'Erro ao atualizar o produto.'], 400);
+            }
             return redirect()->route('produto.index')->with('error', 'Erro ao atualizar o produto.');
         }
         
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Produto atualizado com sucesso.']);
+        }
         return redirect()->route('produto.index')->with('success', 'Produto atualizado com sucesso.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Produto $produto)
+    public function destroy(Request $request, Produto $produto)
     {
         $deletado = $produto->delete();
         
         if (!$deletado) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => 'Erro ao deletar o produto.'], 400);
+            }
             return redirect()->route('produto.index')->with('error', 'Erro ao deletar o produto.');
         }
         
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Produto deletado com sucesso.']);
+        }
         return redirect()->route('produto.index')->with('success', 'Produto deletado com sucesso.');
     }
 }
