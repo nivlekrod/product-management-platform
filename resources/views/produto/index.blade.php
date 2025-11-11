@@ -91,6 +91,46 @@
         // Setup CSRF token for all AJAX requests
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
+        // Global flag to track if edit modal was opened from show modal
+        let editOpenedFromShow = false;
+        
+        // Global function to delete from modal (used in show-content.blade.php)
+        function deleteFromModal(productId) {
+            if (!confirm('Tem certeza que deseja excluir este produto? Esta ação não pode ser desfeita.')) {
+                return;
+            }
+
+            fetch(`/produtos/${productId}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    closeShowModal();
+                    showSuccess(data.message || 'Produto deletado com sucesso.');
+                    loadProdutos();
+                } else {
+                    showError(data.message || 'Erro ao deletar o produto.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showError('Erro ao deletar o produto.');
+            });
+        }
+
+        // Global function to open edit modal from show modal
+        function openEditModalFromShow(productId) {
+            closeShowModal();
+            editOpenedFromShow = true; // Set flag that edit was opened from show
+            openEditModal(productId);
+        }
+
         // Load products on page load
         document.addEventListener('DOMContentLoaded', function() {
             loadProdutos();

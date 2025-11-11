@@ -198,11 +198,28 @@ if (window.location.pathname.includes('/produtos') && !window.location.pathname.
             })
             .then(response => response.json())
             .then(data => {
-                window.location.href = '{{ route("produto.index") }}';
+                if (data.success) {
+                    if (typeof editOpenedFromShow !== 'undefined') {
+                        editOpenedFromShow = false; // Reset flag after successful save
+                    }
+                    closeEditModal();
+                    if (typeof showSuccess === 'function') {
+                        showSuccess(data.message || 'Produto atualizado com sucesso.');
+                    }
+                    if (typeof loadProdutos === 'function') {
+                        loadProdutos();
+                    }
+                } else {
+                    if (typeof showError === 'function') {
+                        showError(data.message || 'Erro ao atualizar o produto.');
+                    }
+                }
             })
             .catch(error => {
                 console.error('Error:', error);
-                window.location.href = '{{ route("produto.index") }}';
+                if (typeof showError === 'function') {
+                    showError('Erro ao atualizar o produto.');
+                }
             });
         });
     }
@@ -228,11 +245,28 @@ if (window.location.pathname.includes('/produtos') && !window.location.pathname.
             })
             .then(response => response.json())
             .then(data => {
-                window.location.href = '{{ route("produto.index") }}';
+                if (data.success) {
+                    if (typeof editOpenedFromShow !== 'undefined') {
+                        editOpenedFromShow = false; // Reset flag after successful delete
+                    }
+                    closeEditModal();
+                    if (typeof showSuccess === 'function') {
+                        showSuccess(data.message || 'Produto deletado com sucesso.');
+                    }
+                    if (typeof loadProdutos === 'function') {
+                        loadProdutos();
+                    }
+                } else {
+                    if (typeof showError === 'function') {
+                        showError(data.message || 'Erro ao deletar o produto.');
+                    }
+                }
             })
             .catch(error => {
                 console.error('Error:', error);
-                window.location.href = '{{ route("produto.index") }}';
+                if (typeof showError === 'function') {
+                    showError('Erro ao deletar o produto.');
+                }
             });
         });
     }

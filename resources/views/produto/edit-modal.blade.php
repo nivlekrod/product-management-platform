@@ -26,8 +26,16 @@
 
     function openEditModal(productId) {
         currentEditProductId = productId;
+        // Don't reset editOpenedFromShow flag if it's already true
         const modal = document.getElementById('editProductModal');
         const modalContent = document.getElementById('editModalContent');
+        
+        // Clear previous content and show loading
+        modalContent.innerHTML = `
+            <div class="flex justify-center items-center py-12">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            </div>
+        `;
         
         modal.classList.remove('hidden');
         
@@ -52,8 +60,24 @@
     }
 
     function closeEditModal() {
+        console.log('closeEditModal called, editOpenedFromShow:', editOpenedFromShow, 'currentEditProductId:', currentEditProductId);
         document.getElementById('editProductModal').classList.add('hidden');
+        
+        // If edit was opened from show modal, reopen show modal
+        if (typeof editOpenedFromShow !== 'undefined' && editOpenedFromShow && currentShowProductId) {
+            console.log('Reopening show modal for product:', currentShowProductId);
+            openShowModal(currentShowProductId);
+        } else {
+            // Only reset currentShowProductId if we're not reopening show modal
+            if (typeof currentShowProductId !== 'undefined') {
+                currentShowProductId = null;
+            }
+        }
+        
         currentEditProductId = null;
+        if (typeof editOpenedFromShow !== 'undefined') {
+            editOpenedFromShow = false;
+        }
     }
 
     // Close modal when clicking outside

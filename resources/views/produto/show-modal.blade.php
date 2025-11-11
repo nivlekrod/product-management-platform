@@ -29,6 +29,13 @@
         const modal = document.getElementById('showProductModal');
         const modalContent = document.getElementById('showModalContent');
         
+        // Clear previous content and show loading
+        modalContent.innerHTML = `
+            <div class="flex justify-center items-center py-12">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            </div>
+        `;
+        
         modal.classList.remove('hidden');
         
         // Fetch product data
@@ -53,7 +60,10 @@
 
     function closeShowModal() {
         document.getElementById('showProductModal').classList.add('hidden');
-        currentShowProductId = null;
+        // Don't reset currentShowProductId if we're opening edit modal
+        if (typeof editOpenedFromShow === 'undefined' || !editOpenedFromShow) {
+            currentShowProductId = null;
+        }
     }
 
     function deleteFromModal(productId) {
