@@ -1,4 +1,3 @@
-<!-- Show Product Modal usando componente reutilizável -->
 <x-modal id="showProductModal" title="Detalhes do Produto" max-width="6xl" top-offset="10" />
 
 <script>
@@ -14,7 +13,6 @@
                     HistoryManager.pushModal('show', productId);
                 },
                 onClose: () => {
-                    // Don't reset currentShowProductId if we're opening edit modal
                     if (typeof editOpenedFromShow === 'undefined' || !editOpenedFromShow) {
                         currentShowProductId = null;
                         HistoryManager.pushIndex();

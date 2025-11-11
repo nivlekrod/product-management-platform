@@ -10,7 +10,6 @@
 <body class="bg-gray-100 min-h-screen py-8">
     <div class="container mx-auto px-4 max-w-7xl">
         <div class="bg-white rounded-lg shadow-md p-6">
-            <!-- Header -->
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-3xl font-bold text-gray-800">Gestão de Produtos</h1>
                 <a href="{{ route('produto.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center gap-2" onclick="event.preventDefault(); openCreateModal();">
@@ -21,7 +20,6 @@
                 </a>
             </div>
 
-            <!-- Success Message -->
             <div id="successMessage" class="hidden bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-6 flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
@@ -29,7 +27,6 @@
                 <span id="successMessageText"></span>
             </div>
 
-            <!-- Error Message -->
             <div id="errorMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6 flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
@@ -37,12 +34,10 @@
                 <span id="errorMessageText"></span>
             </div>
 
-            <!-- Loading State -->
             <div id="loadingState" class="flex justify-center items-center py-12">
                 <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
             </div>
 
-            <!-- Products Table Container -->
             <div id="productsTableContainer" class="hidden">
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
@@ -58,13 +53,11 @@
                             </tr>
                         </thead>
                         <tbody id="productsTableBody" class="bg-white divide-y divide-gray-200">
-                            <!-- Products will be loaded here via AJAX -->
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Empty State -->
             <div id="emptyState" class="hidden text-center py-12">
                 <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
@@ -88,13 +81,10 @@
     @include('produto.show-modal')
 
     <script>
-        // Setup CSRF token for all AJAX requests
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-        // Global flag to track if edit modal was opened from show modal
         let editOpenedFromShow = false;
         
-        // Helper function to get stock status HTML
         function getStockStatusHtml(quantity) {
             if (quantity === 0) {
                 return '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Esgotado</span>';
@@ -105,32 +95,26 @@
             }
         }
 
-        // Helper function to get quantity color class
         function getQuantityColorClass(quantity) {
             return quantity < 10 ? 'text-red-600' : 'text-green-600';
         }
 
-        // Global function to open edit modal from show modal
         function openEditModalFromShow(productId) {
             closeShowModal();
-            editOpenedFromShow = true; // Set flag that edit was opened from show
+            editOpenedFromShow = true;
             openEditModal(productId);
         }
 
-        // Load products on page load
         document.addEventListener('DOMContentLoaded', function() {
             loadProdutos();
             
-            // Check URL on page load to open modal if needed
             checkUrlAndOpenModal();
         });
         
-        // Handle browser back/forward buttons
         window.addEventListener('popstate', function(event) {
             checkUrlAndOpenModal();
         });
         
-        // Function to check URL and open appropriate modal
         function checkUrlAndOpenModal() {
             const path = window.location.pathname;
             const match = path.match(/^\/produtos\/(\d+)$/);
@@ -139,10 +123,8 @@
                 const productId = match[1];
                 const state = history.state;
                 
-                // Close all modals first
                 closeAllModals();
                 
-                // Open the appropriate modal based on state or default to show
                 if (state && state.modal === 'edit') {
                     openEditModal(productId);
                 } else {
@@ -152,12 +134,10 @@
                 closeAllModals();
                 openCreateModal();
             } else {
-                // Close all modals if we're on /produtos
                 closeAllModals();
             }
         }
         
-        // Function to close all modals without updating URL
         function closeAllModals() {
             const editModal = document.getElementById('editProductModal');
             const showModal = document.getElementById('showProductModal');
@@ -168,7 +148,6 @@
             if (createModal) createModal.classList.add('hidden');
         }
 
-        // Function to load produtos via AJAX
         function loadProdutos() {
             const loadingState = document.getElementById('loadingState');
             const tableContainer = document.getElementById('productsTableContainer');
@@ -202,7 +181,6 @@
             });
         }
 
-        // Function to render produtos in the table
         function renderProdutos(produtos) {
             const tbody = document.getElementById('productsTableBody');
             tbody.innerHTML = '';
@@ -264,7 +242,6 @@
             });
         }
 
-        // Function to delete produto via AJAX
         function deleteProduto(produtoId) {
             if (!confirm('Tem certeza que deseja excluir este produto? Esta ação não pode ser desfeita.')) {
                 return;
@@ -282,7 +259,7 @@
             .then(data => {
                 if (data.success) {
                     showSuccess(data.message || 'Produto deletado com sucesso.');
-                    loadProdutos(); // Reload the products list
+                    loadProdutos();
                 } else {
                     showError(data.message || 'Erro ao deletar o produto.');
                 }
@@ -293,32 +270,26 @@
             });
         }
 
-        // Function to update quantity via AJAX
         function updateQuantity(produtoId, change) {
             const quantitySpan = document.getElementById(`quantity-${produtoId}`);
             const currentQuantity = parseInt(quantitySpan.textContent);
             const newQuantity = currentQuantity + change;
 
-            // Don't allow negative quantities
             if (newQuantity < 0) {
                 return;
             }
 
-            // Optimistic UI update
             quantitySpan.textContent = newQuantity;
             quantitySpan.className = `text-sm font-semibold ${getQuantityColorClass(newQuantity)} min-w-[30px] text-center`;
 
-            // Update status badge in the same row
             const row = quantitySpan.closest('tr');
-            const statusCell = row.cells[5]; // Status column is the 6th cell (index 5)
+            const statusCell = row.cells[5];
             statusCell.innerHTML = getStockStatusHtml(newQuantity);
 
-            // Send update to server using centralized API
             ProdutoAPI.updateQuantity(produtoId, newQuantity)
                 .then(data => {
                     if (!data.success) {
-                        // Revert on error
-                        quantitySpan.textContent = currentQuantity;
+                           quantitySpan.textContent = currentQuantity;
                         quantitySpan.className = `text-sm font-semibold ${getQuantityColorClass(currentQuantity)} min-w-[30px] text-center`;
                         statusCell.innerHTML = getStockStatusHtml(currentQuantity);
                         showError(data.message || 'Erro ao atualizar quantidade.');
@@ -326,7 +297,6 @@
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    // Revert on error
                     quantitySpan.textContent = currentQuantity;
                     quantitySpan.className = `text-sm font-semibold ${getQuantityColorClass(currentQuantity)} min-w-[30px] text-center`;
                     statusCell.innerHTML = getStockStatusHtml(currentQuantity);
@@ -334,7 +304,6 @@
                 });
         }
 
-        // Helper functions
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;

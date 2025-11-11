@@ -1,16 +1,3 @@
-{{-- 
-    Componente Modal Reutilizável
-    
-    Props:
-    - $id: ID único do modal (obrigatório)
-    - $title: Título do modal (obrigatório)
-    - $maxWidth: Largura máxima (opcional, padrão: '4xl')
-    - $topOffset: Offset do topo (opcional, padrão: '20')
-    
-    Slots:
-    - default: Conteúdo do modal (carregado dinamicamente via AJAX)
---}}
-
 @props([
     'id',
     'title',
@@ -19,15 +6,12 @@
 ])
 
 @php
-    // Extract the modal type from the ID (e.g., "editProductModal" -> "edit")
     $modalType = preg_replace('/ProductModal$/', '', $id);
     $closeFunction = 'close' . ucfirst($modalType) . 'Modal';
 @endphp
 
-<!-- Modal {{ $title }} -->
 <div id="{{ $id }}" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
     <div class="relative top-{{ $topOffset }} mx-auto p-5 border w-11/12 max-w-{{ $maxWidth }} shadow-lg rounded-lg bg-white {{ $topOffset === '10' ? 'my-10' : '' }}">
-        <!-- Modal Header -->
         <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
             <h2 class="text-2xl font-bold text-gray-800">{{ $title }}</h2>
             <button onclick="{{ $closeFunction }}()" class="text-gray-600 hover:text-gray-900 transition duration-150">
@@ -37,7 +21,6 @@
             </button>
         </div>
 
-        <!-- Modal Body -->
         <div id="{{ $id }}Content" class="mb-6">
             @include('components.loading-spinner')
         </div>

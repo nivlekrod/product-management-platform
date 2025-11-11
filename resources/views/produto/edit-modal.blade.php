@@ -1,4 +1,3 @@
-<!-- Edit Product Modal usando componente reutilizável -->
 <x-modal id="editProductModal" title="Editar Produto" max-width="4xl" top-offset="10" />
 
 <script>
@@ -14,7 +13,6 @@
                     HistoryManager.pushModal('edit', productId);
                 },
                 onClose: () => {
-                    // If edit was opened from show modal, reopen show modal
                     if (typeof editOpenedFromShow !== 'undefined' && editOpenedFromShow && currentShowProductId) {
                         console.log('Reopening show modal for product:', currentShowProductId);
                         openShowModal(currentShowProductId);

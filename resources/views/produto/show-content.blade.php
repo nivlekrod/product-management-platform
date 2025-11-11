@@ -1,6 +1,4 @@
-<!-- Product Details Content for Modal -->
 <div class="space-y-6">
-    <!-- Breadcrumb and Product ID -->
     <div class="mb-4">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
@@ -24,11 +22,8 @@
         </div>
     </div>
 
-    <!-- Grid principal -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Coluna principal (2/3) -->
         <div class="lg:col-span-2 space-y-6">
-            <!-- Card de Informações Principais -->
             <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
                 <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
                     <h2 class="text-xl font-bold text-white flex items-center gap-2">
@@ -40,7 +35,6 @@
                 </div>
                 <div class="p-6">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        <!-- Preço -->
                         <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-5 border border-blue-200">
                             <label class="block text-xs font-semibold text-blue-700 uppercase tracking-wider mb-2 flex items-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -51,7 +45,6 @@
                             <p class="text-3xl font-bold text-blue-900">R$ {{ number_format($produto->preco, 2, ',', '.') }}</p>
                         </div>
 
-                        <!-- Quantidade -->
                         <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-5 border border-green-200">
                             <label class="block text-xs font-semibold text-green-700 uppercase tracking-wider mb-2 flex items-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -66,7 +59,6 @@
                 </div>
             </div>
 
-            <!-- Card de Descrição -->
             <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
                 <div class="bg-gradient-to-r from-purple-600 to-purple-700 px-6 py-4">
                     <h2 class="text-xl font-bold text-white flex items-center gap-2">
@@ -82,9 +74,7 @@
             </div>
         </div>
 
-        <!-- Coluna lateral (1/3) -->
         <div class="space-y-6">
-            <!-- Card de Datas -->
             <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
                 <div class="bg-gradient-to-r from-indigo-600 to-indigo-700 px-6 py-4">
                     <h2 class="text-xl font-bold text-white flex items-center gap-2">
@@ -115,7 +105,6 @@
                 </div>
             </div>
 
-            <!-- Card de Status -->
             <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
                 <div class="bg-gradient-to-r from-orange-600 to-orange-700 px-6 py-4">
                     <h2 class="text-xl font-bold text-white flex items-center gap-2">

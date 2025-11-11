@@ -1,7 +1,3 @@
-/**
- * Modal Manager - Gerenciamento centralizado de modais
- */
-
 class ModalManager {
     constructor(modalId, options = {}) {
         this.modalId = modalId;
@@ -19,14 +15,12 @@ class ModalManager {
     }
 
     setupEventListeners() {
-        // Close modal when clicking outside
         this.modal?.addEventListener('click', (e) => {
             if (e.target === this.modal) {
                 this.close();
             }
         });
 
-        // Close modal on Escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && !this.modal.classList.contains('hidden')) {
                 this.close();
@@ -37,12 +31,10 @@ class ModalManager {
     open(fetchUrl = null) {
         this.modal.classList.remove('hidden');
         
-        // Call onOpen callback
         if (this.options.onOpen) {
             this.options.onOpen();
         }
 
-        // Fetch content if URL provided
         const url = fetchUrl || this.options.fetchUrl;
         if (url) {
             this.loadContent(url);
@@ -52,14 +44,12 @@ class ModalManager {
     close() {
         this.modal.classList.add('hidden');
         
-        // Call onClose callback
         if (this.options.onClose) {
             this.options.onClose();
         }
     }
 
     loadContent(url) {
-        // Show loading spinner
         this.showLoading();
 
         fetch(url, {
@@ -99,9 +89,6 @@ class ModalManager {
     }
 }
 
-/**
- * CRUD Helper Functions
- */
 const ProdutoAPI = {
     csrfToken: document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
 
@@ -132,9 +119,6 @@ const ProdutoAPI = {
     }
 };
 
-/**
- * URL History Management
- */
 const HistoryManager = {
     pushModal(type, productId = null) {
         const urls = {
@@ -155,7 +139,6 @@ const HistoryManager = {
     }
 };
 
-// Make available globally
 window.ModalManager = ModalManager;
 window.ProdutoAPI = ProdutoAPI;
 window.HistoryManager = HistoryManager;

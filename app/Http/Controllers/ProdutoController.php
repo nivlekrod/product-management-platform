@@ -8,27 +8,18 @@ use Illuminate\Http\Request;
 
 class ProdutoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(): View
     {
         $produtos = Produto::all();
         return view('produto.index', ['produtos' => $produtos]);
     }
 
-    /**
-     * Return products list as JSON for AJAX requests.
-     */
     public function list()
     {
         $produtos = Produto::orderBy('id', 'asc')->get();
         return response()->json(['produtos' => $produtos]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create(Request $request)
     {
         if ($request->ajax() || $request->wantsJson()) {
@@ -37,9 +28,6 @@ class ProdutoController extends Controller
         return view('produto.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $produto = Produto::where(['nome' => $request->nome, 'descricao' => $request->descricao])->first();
@@ -72,9 +60,6 @@ class ProdutoController extends Controller
         return redirect()->route('produto.index')->with('success', 'Produto criado com sucesso.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Request $request, Produto $produto)
     {
         if ($request->wantsJson()) {
@@ -86,9 +71,6 @@ class ProdutoController extends Controller
         return view('produto.show', ['produto' => $produto]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Request $request, Produto $produto)
     {
         if ($request->ajax() || $request->wantsJson()) {
@@ -97,9 +79,6 @@ class ProdutoController extends Controller
         return view('produto.edit', ['produto' => $produto]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Produto $produto)
     {
         $produto->update([
@@ -122,9 +101,6 @@ class ProdutoController extends Controller
         return redirect()->route('produto.index')->with('success', 'Produto atualizado com sucesso.');
     }
 
-    /**
-     * Update only the quantity of the specified resource.
-     */
     public function updateQuantity(Request $request, Produto $produto)
     {
         $request->validate([
@@ -141,9 +117,6 @@ class ProdutoController extends Controller
         ], 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Request $request, Produto $produto)
     {
         $deletado = $produto->delete();

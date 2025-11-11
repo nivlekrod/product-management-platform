@@ -10,7 +10,6 @@
 </head>
 <body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
     <div class="container mx-auto px-4 py-8 @yield('container-width', 'max-w-4xl')">
-        <!-- Header com breadcrumb -->
         <div class="mb-6">
             <nav class="flex items-center text-sm text-gray-600 mb-4">
                 <a href="{{ route('produto.index') }}" class="hover:text-blue-600 transition-colors">Produtos</a>
@@ -30,7 +29,6 @@
     </div>
     
     <script>
-        // Define functions for standalone pages (not in modal context)
         let editOpenedFromShow = false;
 
         function closeShowModal() {
@@ -38,10 +36,8 @@
         }
 
         function openEditModal(productId) {
-            // Check if we came from show page
             const referrer = document.referrer;
             if (referrer && referrer.includes(`/produtos/${productId}`) && !referrer.includes('/edit')) {
-                // Store that we came from show page
                 sessionStorage.setItem('returnToShow', productId);
             }
             window.location.href = `/produtos/${productId}/edit`;

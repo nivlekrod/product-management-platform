@@ -1,4 +1,3 @@
-<!-- Validation Errors -->
 @if($errors->any())
     <div class="bg-red-50 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">
         <div class="flex items-start">
@@ -17,11 +16,9 @@
     </div>
 @endif
 
-<!-- Form -->
 <form action="{{ route('produto.store') }}" method="POST" class="space-y-6" id="createProductForm">
     @csrf
 
-    <!-- Nome do Produto -->
     <div>
         <label for="nome" class="block text-sm font-medium text-gray-700 mb-2">
             Nome do Produto <span class="text-red-500">*</span>
@@ -40,7 +37,6 @@
         @enderror
     </div>
 
-    <!-- Descrição -->
     <div>
         <label for="descricao" class="block text-sm font-medium text-gray-700 mb-2">
             Descrição <span class="text-red-500">*</span>
@@ -58,9 +54,7 @@
         @enderror
     </div>
 
-    <!-- Preço e Quantidade (Grid Layout) -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Preço -->
         <div>
             <label for="preco" class="block text-sm font-medium text-gray-700 mb-2">
                 Preço (R$) <span class="text-red-500">*</span>
@@ -86,7 +80,6 @@
             @enderror
         </div>
 
-        <!-- Quantidade -->
         <div>
             <label for="quantidade" class="block text-sm font-medium text-gray-700 mb-2">
                 Quantidade em Estoque <span class="text-red-500">*</span>
@@ -107,7 +100,6 @@
         </div>
     </div>
 
-    <!-- Info Helper -->
     <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <div class="flex items-start">
             <svg class="w-5 h-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -119,7 +111,6 @@
         </div>
     </div>
 
-    <!-- Action Buttons -->
     <div class="flex gap-4 pt-4 border-t border-gray-200">
         <button 
             type="submit"
@@ -145,7 +136,6 @@
 </form>
 
 <script>
-// Handle form submission in modal context
 if (window.location.pathname === '/produtos' || window.location.pathname === '/produtos/') {
     const createForm = document.getElementById('createProductForm');
     

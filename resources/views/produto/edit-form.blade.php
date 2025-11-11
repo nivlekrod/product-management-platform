@@ -1,4 +1,3 @@
-<!-- Success Message -->
 @if (session('success'))
     <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-6 flex items-center">
         <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -8,7 +7,6 @@
     </div>
 @endif
 
-<!-- Error Messages -->
 @if ($errors->any())
     <div class="bg-red-50 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">
         <div class="flex items-start">
@@ -27,12 +25,10 @@
     </div>
 @endif
 
-<!-- Form -->
 <form action="{{ route('produto.update', $produto->id) }}" method="POST" class="space-y-6" id="editProductForm">
     @csrf
     @method('PUT')
 
-    <!-- Nome -->
     <div>
         <label for="nome" class="block text-sm font-medium text-gray-700 mb-2">
             Nome do Produto <span class="text-red-500">*</span>
@@ -51,7 +47,6 @@
         @enderror
     </div>
 
-    <!-- Descrição -->
     <div>
         <label for="descricao" class="block text-sm font-medium text-gray-700 mb-2">
             Descrição <span class="text-red-500">*</span>
@@ -69,9 +64,7 @@
         @enderror
     </div>
 
-    <!-- Grid: Preço e Quantidade -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Preço -->
         <div>
             <label for="preco" class="block text-sm font-medium text-gray-700 mb-2">
                 Preço (R$) <span class="text-red-500">*</span>
@@ -97,7 +90,6 @@
             @enderror
         </div>
 
-        <!-- Quantidade -->
         <div>
             <label for="quantidade" class="block text-sm font-medium text-gray-700 mb-2">
                 Quantidade em Estoque <span class="text-red-500">*</span>
@@ -118,7 +110,6 @@
         </div>
     </div>
 
-    <!-- Info Helper -->
     <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <div class="flex items-start">
             <svg class="w-5 h-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -131,7 +122,6 @@
         </div>
     </div>
 
-    <!-- Action Buttons -->
     <div class="flex gap-4 pt-4 border-t border-gray-200">
         <button 
             type="submit"
@@ -156,7 +146,6 @@
     </div>
 </form>
 
-<!-- Delete Section -->
 <div class="mt-8 pt-6 border-t border-gray-200">
     <h3 class="text-lg font-semibold text-gray-800 mb-2">Zona de Perigo</h3>
     <p class="text-sm text-gray-600 mb-4">Ao deletar o produto, todos os dados serão removidos permanentemente.</p>
@@ -176,7 +165,6 @@
 </div>
 
 <script>
-// Handle form submission in modal context
 if (window.location.pathname.includes('/produtos') && !window.location.pathname.includes('/edit')) {
     const editForm = document.getElementById('editProductForm');
     const deleteForm = document.getElementById('deleteProductForm');
@@ -203,7 +191,7 @@ if (window.location.pathname.includes('/produtos') && !window.location.pathname.
                     const productId = currentEditProductId;
                     
                     if (typeof editOpenedFromShow !== 'undefined') {
-                        editOpenedFromShow = false; // Reset flag after successful save
+                        editOpenedFromShow = false;
                     }
                     closeEditModal();
                     
@@ -214,7 +202,6 @@ if (window.location.pathname.includes('/produtos') && !window.location.pathname.
                         loadProdutos();
                     }
                     
-                    // Reopen show modal if edit was opened from show
                     if (wasOpenedFromShow && productId && typeof openShowModal === 'function') {
                         setTimeout(() => {
                             openShowModal(productId);
@@ -258,7 +245,7 @@ if (window.location.pathname.includes('/produtos') && !window.location.pathname.
             .then(data => {
                 if (data.success) {
                     if (typeof editOpenedFromShow !== 'undefined') {
-                        editOpenedFromShow = false; // Reset flag after successful delete
+                        editOpenedFromShow = false;
                     }
                     closeEditModal();
                     if (typeof showSuccess === 'function') {

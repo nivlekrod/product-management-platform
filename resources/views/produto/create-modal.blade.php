@@ -1,8 +1,6 @@
-<!-- Create Product Modal usando componente reutilizável -->
 <x-modal id="createProductModal" title="Cadastrar Novo Produto" max-width="4xl" top-offset="10" />
 
 <script>
-    // Initialize create modal
     let createModalManager = null;
 
     function openCreateModal() {
