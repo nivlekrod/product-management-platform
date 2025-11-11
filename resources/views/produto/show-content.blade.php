@@ -76,7 +76,7 @@
                         Descrição do Produto
                     </h2>
                 </div>
-                <div class="p-6">
+                <div class="p-6 max-h-67 overflow-y-auto">
                     <p class="text-gray-700 leading-relaxed text-justify">{{ $produto->descricao }}</p>
                 </div>
             </div>
