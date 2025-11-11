@@ -110,36 +110,6 @@
             return quantity < 10 ? 'text-red-600' : 'text-green-600';
         }
 
-        // Global function to delete from modal (used in show-content.blade.php)
-        function deleteFromModal(productId) {
-            if (!confirm('Tem certeza que deseja excluir este produto? Esta ação não pode ser desfeita.')) {
-                return;
-            }
-
-            fetch(`/produtos/${productId}`, {
-                method: 'DELETE',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    closeShowModal();
-                    showSuccess(data.message || 'Produto deletado com sucesso.');
-                    loadProdutos();
-                } else {
-                    showError(data.message || 'Erro ao deletar o produto.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showError('Erro ao deletar o produto.');
-            });
-        }
-
         // Global function to open edit modal from show modal
         function openEditModalFromShow(productId) {
             closeShowModal();
@@ -343,37 +313,25 @@
             const statusCell = row.cells[5]; // Status column is the 6th cell (index 5)
             statusCell.innerHTML = getStockStatusHtml(newQuantity);
 
-            // Send update to server
-            fetch(`/produtos/${produtoId}/quantidade`, {
-                method: 'PATCH',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
-                },
-                body: JSON.stringify({
-                    quantidade: newQuantity
+            // Send update to server using centralized API
+            ProdutoAPI.updateQuantity(produtoId, newQuantity)
+                .then(data => {
+                    if (!data.success) {
+                        // Revert on error
+                        quantitySpan.textContent = currentQuantity;
+                        quantitySpan.className = `text-sm font-semibold ${getQuantityColorClass(currentQuantity)} min-w-[30px] text-center`;
+                        statusCell.innerHTML = getStockStatusHtml(currentQuantity);
+                        showError(data.message || 'Erro ao atualizar quantidade.');
+                    }
                 })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (!data.success) {
+                .catch(error => {
+                    console.error('Error:', error);
                     // Revert on error
                     quantitySpan.textContent = currentQuantity;
                     quantitySpan.className = `text-sm font-semibold ${getQuantityColorClass(currentQuantity)} min-w-[30px] text-center`;
                     statusCell.innerHTML = getStockStatusHtml(currentQuantity);
-                    showError(data.message || 'Erro ao atualizar quantidade.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                // Revert on error
-                quantitySpan.textContent = currentQuantity;
-                quantitySpan.className = `text-sm font-semibold ${getQuantityColorClass(currentQuantity)} min-w-[30px] text-center`;
-                statusCell.innerHTML = getStockStatusHtml(currentQuantity);
-                showError('Erro ao atualizar quantidade.');
-            });
+                    showError('Erro ao atualizar quantidade.');
+                });
         }
 
         // Helper functions
