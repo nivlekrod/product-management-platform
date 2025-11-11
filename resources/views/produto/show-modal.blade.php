@@ -56,6 +56,45 @@
         currentShowProductId = null;
     }
 
+    function deleteFromModal(productId) {
+        if (!confirm('Tem certeza que deseja excluir este produto? Esta ação não pode ser desfeita.')) {
+            return;
+        }
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        
+        fetch(`/produtos/${productId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                closeShowModal();
+                if (typeof showSuccess === 'function') {
+                    showSuccess(data.message || 'Produto deletado com sucesso.');
+                }
+                if (typeof loadProdutos === 'function') {
+                    loadProdutos();
+                }
+            } else {
+                if (typeof showError === 'function') {
+                    showError(data.message || 'Erro ao deletar o produto.');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            if (typeof showError === 'function') {
+                showError('Erro ao deletar o produto.');
+            }
+        });
+    }
+
     // Close modal when clicking outside
     document.getElementById('showProductModal')?.addEventListener('click', function(e) {
         if (e.target === this) {
