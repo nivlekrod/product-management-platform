@@ -55,7 +55,6 @@
             name="descricao" 
             id="descricao" 
             rows="4"
-            required
             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 @error('descricao') border-red-500 @enderror"
             placeholder="Descreva o produto"
         >{{ old('descricao', $produto->descricao) }}</textarea>
