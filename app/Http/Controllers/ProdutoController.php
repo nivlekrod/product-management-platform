@@ -10,7 +10,7 @@ class ProdutoController extends Controller
 {
     public function index(): View
     {
-        $produtos = Produto::all();
+        $produtos = Produto::orderBy('id', 'asc')->get();
         return view('produto.index', ['produtos' => $produtos]);
     }
 
@@ -47,7 +47,7 @@ class ProdutoController extends Controller
             return redirect()->route('produto.index')->with('success', 'Produto já existente, estoque atualizado com sucesso.');
         }
 
-        Produto::create([
+        $produtoCriado = Produto::create([
             'nome' => $request->nome,
             'descricao' => $request->descricao,
             'preco' => $request->preco,
@@ -55,7 +55,7 @@ class ProdutoController extends Controller
         ]);
 
         if ($request->ajax() || $request->wantsJson()) {
-            return response()->json(['success' => true, 'message' => 'Produto criado com sucesso.', 'produto' => $request->all()], 200);
+            return response()->json(['success' => true, 'message' => 'Produto criado com sucesso.', 'produto' => $produtoCriado], 200);
         }
         return redirect()->route('produto.index')->with('success', 'Produto criado com sucesso.');
     }
