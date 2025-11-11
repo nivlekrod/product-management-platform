@@ -20,6 +20,20 @@
                 </a>
             </div>
 
+            <div class="mb-6">
+                <div class="relative">
+                    <input type="text" id="searchInput" placeholder="Pesquisar produtos por nome..." class="w-full px-4 py-3 pl-10 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <svg class="absolute left-3 top-3.5 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <button id="clearSearch" class="hidden absolute right-3 top-3 text-gray-400 hover:text-gray-600" onclick="clearSearch()">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
             <div id="successMessage" class="hidden bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-6 flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
@@ -109,6 +123,25 @@
             loadProdutos();
             
             checkUrlAndOpenModal();
+
+            const searchInput = document.getElementById('searchInput');
+            const clearSearchBtn = document.getElementById('clearSearch');
+            
+            let searchTimeout;
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                const searchValue = this.value.trim();
+                
+                if (searchValue) {
+                    clearSearchBtn.classList.remove('hidden');
+                } else {
+                    clearSearchBtn.classList.add('hidden');
+                }
+                
+                searchTimeout = setTimeout(() => {
+                    loadProdutos(searchValue);
+                }, 300);
+            });
         });
         
         window.addEventListener('popstate', function(event) {
@@ -148,7 +181,7 @@
             if (createModal) createModal.classList.add('hidden');
         }
 
-        function loadProdutos() {
+        function loadProdutos(searchTerm = '') {
             const loadingState = document.getElementById('loadingState');
             const tableContainer = document.getElementById('productsTableContainer');
             const emptyState = document.getElementById('emptyState');
@@ -157,7 +190,11 @@
             tableContainer.classList.add('hidden');
             emptyState.classList.add('hidden');
 
-            fetch('/produtos/list', {
+            const url = searchTerm 
+                ? `/produtos/list?search=${encodeURIComponent(searchTerm)}` 
+                : '/produtos/list';
+
+            fetch(url, {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     'Accept': 'application/json'
@@ -171,7 +208,11 @@
                     renderProdutos(data.produtos);
                     tableContainer.classList.remove('hidden');
                 } else {
-                    emptyState.classList.remove('hidden');
+                    if (searchTerm) {
+                        showEmptySearchState(searchTerm);
+                    } else {
+                        emptyState.classList.remove('hidden');
+                    }
                 }
             })
             .catch(error => {
@@ -179,6 +220,31 @@
                 loadingState.classList.add('hidden');
                 showError('Erro ao carregar os produtos.');
             });
+        }
+
+        function showEmptySearchState(searchTerm) {
+            const emptyState = document.getElementById('emptyState');
+            emptyState.innerHTML = `
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <h3 class="mt-2 text-lg font-medium text-gray-900">Nenhum produto encontrado</h3>
+                <p class="mt-1 text-sm text-gray-500">Não encontramos produtos com o termo "<strong>${escapeHtml(searchTerm)}</strong>".</p>
+                <div class="mt-6">
+                    <button onclick="clearSearch()" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                        Limpar Pesquisa
+                    </button>
+                </div>
+            `;
+            emptyState.classList.remove('hidden');
+        }
+
+        function clearSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const clearSearchBtn = document.getElementById('clearSearch');
+            searchInput.value = '';
+            clearSearchBtn.classList.add('hidden');
+            loadProdutos();
         }
 
         function renderProdutos(produtos) {

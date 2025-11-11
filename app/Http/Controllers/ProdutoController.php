@@ -15,9 +15,30 @@ class ProdutoController extends Controller
         return view('produto.index', ['produtos' => $produtos]);
     }
 
-    public function list()
+    public function list(Request $request)
     {
-        $produtos = Produto::orderBy('id', 'asc')->get();
+        $query = Produto::query();
+
+        if ($request->has('search') && $request->search !== '') {
+            $search = $request->search;
+            $query->whereLike('nome', "%{$search}%");
+        }
+
+        $produtos = $query->orderBy('id', 'asc')->get();
+        return response()->json(['produtos' => $produtos]);
+    }
+
+    public function search(Request $request)
+    {
+        $request->validate([
+            'q' => 'required|string|min:1'
+        ]);
+
+        $searchTerm = $request->q;
+        $produtos = Produto::whereLike('nome', "%{$searchTerm}%")
+            ->orderBy('nome', 'asc')
+            ->get();
+
         return response()->json(['produtos' => $produtos]);
     }
 
