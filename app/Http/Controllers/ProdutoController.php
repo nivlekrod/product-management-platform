@@ -77,7 +77,10 @@ class ProdutoController extends Controller
      */
     public function show(Request $request, Produto $produto)
     {
-        if ($request->ajax() || $request->wantsJson()) {
+        if ($request->wantsJson()) {
+            return response()->json(['produto' => $produto]);
+        }
+        if ($request->ajax()) {
             return view('produto.show-content', ['produto' => $produto]);
         }
         return view('produto.show', ['produto' => $produto]);
