@@ -205,9 +205,11 @@
                         </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        ${produto.quantidade < 10 
-                            ? '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Estoque Baixo</span>'
-                            : '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Em Estoque</span>'
+                        ${produto.quantidade === 0
+                            ? '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Esgotado</span>'
+                            : produto.quantidade < 10 
+                                ? '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Estoque Baixo</span>'
+                                : '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Em Estoque</span>'
                         }
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -282,9 +284,11 @@
             // Update status badge in the same row
             const row = quantitySpan.closest('tr');
             const statusCell = row.cells[5]; // Status column is the 6th cell (index 5)
-            statusCell.innerHTML = newQuantity < 10 
-                ? '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Estoque Baixo</span>'
-                : '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Em Estoque</span>';
+            statusCell.innerHTML = newQuantity === 0
+                ? '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Esgotado</span>'
+                : newQuantity < 10 
+                    ? '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Estoque Baixo</span>'
+                    : '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Em Estoque</span>';
 
             // Send update to server
             fetch(`/produtos/${produtoId}/quantidade`, {
@@ -305,9 +309,11 @@
                     // Revert on error
                     quantitySpan.textContent = currentQuantity;
                     quantitySpan.className = `text-sm font-semibold ${currentQuantity < 10 ? 'text-red-600' : 'text-green-600'} min-w-[30px] text-center`;
-                    statusCell.innerHTML = currentQuantity < 10 
-                        ? '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Estoque Baixo</span>'
-                        : '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Em Estoque</span>';
+                    statusCell.innerHTML = currentQuantity === 0
+                        ? '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Esgotado</span>'
+                        : currentQuantity < 10 
+                            ? '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Estoque Baixo</span>'
+                            : '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Em Estoque</span>';
                     showError(data.message || 'Erro ao atualizar quantidade.');
                 }
             })
@@ -316,9 +322,11 @@
                 // Revert on error
                 quantitySpan.textContent = currentQuantity;
                 quantitySpan.className = `text-sm font-semibold ${currentQuantity < 10 ? 'text-red-600' : 'text-green-600'} min-w-[30px] text-center`;
-                statusCell.innerHTML = currentQuantity < 10 
-                    ? '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Estoque Baixo</span>'
-                    : '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Em Estoque</span>';
+                statusCell.innerHTML = currentQuantity === 0
+                    ? '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Esgotado</span>'
+                    : currentQuantity < 10 
+                        ? '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Estoque Baixo</span>'
+                        : '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Em Estoque</span>';
                 showError('Erro ao atualizar quantidade.');
             });
         }
