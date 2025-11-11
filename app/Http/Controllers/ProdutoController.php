@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Produto;
+use App\Http\Requests\ProdutoRequest;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
@@ -28,7 +29,7 @@ class ProdutoController extends Controller
         return view('produto.create');
     }
 
-    public function store(Request $request)
+    public function store(ProdutoRequest $request)
     {
         $produto = Produto::where(['nome' => $request->nome, 'descricao' => $request->descricao])->first();
 
@@ -79,7 +80,7 @@ class ProdutoController extends Controller
         return view('produto.edit', ['produto' => $produto]);
     }
 
-    public function update(Request $request, Produto $produto)
+    public function update(ProdutoRequest $request, Produto $produto)
     {
         $produto->update([
             'nome' => $request->nome,
