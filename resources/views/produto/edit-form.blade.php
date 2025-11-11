@@ -199,15 +199,26 @@ if (window.location.pathname.includes('/produtos') && !window.location.pathname.
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    const wasOpenedFromShow = typeof editOpenedFromShow !== 'undefined' && editOpenedFromShow;
+                    const productId = currentEditProductId;
+                    
                     if (typeof editOpenedFromShow !== 'undefined') {
                         editOpenedFromShow = false; // Reset flag after successful save
                     }
                     closeEditModal();
+                    
                     if (typeof showSuccess === 'function') {
                         showSuccess(data.message || 'Produto atualizado com sucesso.');
                     }
                     if (typeof loadProdutos === 'function') {
                         loadProdutos();
+                    }
+                    
+                    // Reopen show modal if edit was opened from show
+                    if (wasOpenedFromShow && productId && typeof openShowModal === 'function') {
+                        setTimeout(() => {
+                            openShowModal(productId);
+                        }, 300);
                     }
                 } else {
                     if (typeof showError === 'function') {
