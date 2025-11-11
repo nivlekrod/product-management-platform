@@ -120,6 +120,25 @@ class ProdutoController extends Controller
     }
 
     /**
+     * Update only the quantity of the specified resource.
+     */
+    public function updateQuantity(Request $request, Produto $produto)
+    {
+        $request->validate([
+            'quantidade' => 'required|integer|min:0'
+        ]);
+
+        $produto->quantidade = $request->quantidade;
+        $produto->save();
+        
+        return response()->json([
+            'success' => true, 
+            'message' => 'Quantidade atualizada com sucesso.', 
+            'produto' => $produto
+        ], 200);
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Request $request, Produto $produto)

@@ -192,9 +192,17 @@
                         </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-sm font-medium ${produto.quantidade < 10 ? 'text-red-600' : 'text-green-600'}">
-                            ${produto.quantidade}
-                        </span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="updateQuantity(${produto.id}, -1)" class="flex items-center justify-center w-7 h-7 bg-red-500 hover:bg-red-600 text-white rounded transition duration-150 font-bold text-sm">
+                                −
+                            </button>
+                            <span id="quantity-${produto.id}" class="text-sm font-semibold ${produto.quantidade < 10 ? 'text-red-600' : 'text-green-600'} min-w-[30px] text-center">
+                                ${produto.quantidade}
+                            </span>
+                            <button onclick="updateQuantity(${produto.id}, 1)" class="flex items-center justify-center w-7 h-7 bg-green-500 hover:bg-green-600 text-white rounded transition duration-150 font-bold text-sm">
+                                +
+                            </button>
+                        </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         ${produto.quantidade < 10 
@@ -253,6 +261,65 @@
             .catch(error => {
                 console.error('Error:', error);
                 showError('Erro ao deletar o produto.');
+            });
+        }
+
+        // Function to update quantity via AJAX
+        function updateQuantity(produtoId, change) {
+            const quantitySpan = document.getElementById(`quantity-${produtoId}`);
+            const currentQuantity = parseInt(quantitySpan.textContent);
+            const newQuantity = currentQuantity + change;
+
+            // Don't allow negative quantities
+            if (newQuantity < 0) {
+                return;
+            }
+
+            // Optimistic UI update
+            quantitySpan.textContent = newQuantity;
+            quantitySpan.className = `text-sm font-semibold ${newQuantity < 10 ? 'text-red-600' : 'text-green-600'} min-w-[30px] text-center`;
+
+            // Update status badge in the same row
+            const row = quantitySpan.closest('tr');
+            const statusCell = row.cells[5]; // Status column is the 6th cell (index 5)
+            statusCell.innerHTML = newQuantity < 10 
+                ? '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Estoque Baixo</span>'
+                : '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Em Estoque</span>';
+
+            // Send update to server
+            fetch(`/produtos/${produtoId}/quantidade`, {
+                method: 'PATCH',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({
+                    quantidade: newQuantity
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    // Revert on error
+                    quantitySpan.textContent = currentQuantity;
+                    quantitySpan.className = `text-sm font-semibold ${currentQuantity < 10 ? 'text-red-600' : 'text-green-600'} min-w-[30px] text-center`;
+                    statusCell.innerHTML = currentQuantity < 10 
+                        ? '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Estoque Baixo</span>'
+                        : '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Em Estoque</span>';
+                    showError(data.message || 'Erro ao atualizar quantidade.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Revert on error
+                quantitySpan.textContent = currentQuantity;
+                quantitySpan.className = `text-sm font-semibold ${currentQuantity < 10 ? 'text-red-600' : 'text-green-600'} min-w-[30px] text-center`;
+                statusCell.innerHTML = currentQuantity < 10 
+                    ? '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Estoque Baixo</span>'
+                    : '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Em Estoque</span>';
+                showError('Erro ao atualizar quantidade.');
             });
         }
 

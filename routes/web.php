@@ -12,4 +12,5 @@ Route::post('/produtos', [ProdutoController::class, 'store'])->name('produto.sto
 Route::get('/produtos/{produto}', [ProdutoController::class, 'show'])->name('produto.show');
 Route::get('/produtos/{produto}/edit', [ProdutoController::class, 'edit'])->name('produto.edit');
 Route::put('/produtos/{produto}', [ProdutoController::class, 'update'])->name('produto.update');
+Route::patch('/produtos/{produto}/quantidade', [ProdutoController::class, 'updateQuantity'])->name('produto.updateQuantity');
 Route::delete('/produtos/{produto}', [ProdutoController::class, 'destroy'])->name('produto.destroy');
