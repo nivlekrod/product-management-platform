@@ -22,7 +22,7 @@ class ProdutoController extends Controller
      */
     public function list()
     {
-        $produtos = Produto::orderBy('id', 'desc')->get();
+        $produtos = Produto::orderBy('id', 'asc')->get();
         return response()->json(['produtos' => $produtos]);
     }
 
@@ -54,7 +54,7 @@ class ProdutoController extends Controller
             $produto->save();
 
             if ($request->ajax() || $request->wantsJson()) {
-                return response()->json(['success' => true, 'message' => 'Produto já existente, estoque atualizado com sucesso.']);
+                return response()->json(['success' => true, 'message' => 'Produto já existente, estoque atualizado com sucesso.', 'produto' => $produto], 200);
             }
             return redirect()->route('produto.index')->with('success', 'Produto já existente, estoque atualizado com sucesso.');
         }
@@ -67,7 +67,7 @@ class ProdutoController extends Controller
         ]);
 
         if ($request->ajax() || $request->wantsJson()) {
-            return response()->json(['success' => true, 'message' => 'Produto criado com sucesso.']);
+            return response()->json(['success' => true, 'message' => 'Produto criado com sucesso.', 'produto' => $request->all()], 200);
         }
         return redirect()->route('produto.index')->with('success', 'Produto criado com sucesso.');
     }
@@ -78,7 +78,7 @@ class ProdutoController extends Controller
     public function show(Request $request, Produto $produto)
     {
         if ($request->ajax() || $request->wantsJson()) {
-            return view('produto.show-content', ['produto' => $produto]);
+            return response()->json(['produto' => $produto]);
         }
         return view('produto.show', ['produto' => $produto]);
     }
@@ -114,7 +114,7 @@ class ProdutoController extends Controller
         }
         
         if ($request->ajax() || $request->wantsJson()) {
-            return response()->json(['success' => true, 'message' => 'Produto atualizado com sucesso.']);
+            return response()->json(['success' => true, 'message' => 'Produto atualizado com sucesso.', 'produto' => $produto], 200);
         }
         return redirect()->route('produto.index')->with('success', 'Produto atualizado com sucesso.');
     }
