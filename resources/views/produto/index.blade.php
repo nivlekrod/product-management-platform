@@ -94,6 +94,22 @@
         // Global flag to track if edit modal was opened from show modal
         let editOpenedFromShow = false;
         
+        // Helper function to get stock status HTML
+        function getStockStatusHtml(quantity) {
+            if (quantity === 0) {
+                return '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Esgotado</span>';
+            } else if (quantity < 10) {
+                return '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Estoque Baixo</span>';
+            } else {
+                return '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Em Estoque</span>';
+            }
+        }
+
+        // Helper function to get quantity color class
+        function getQuantityColorClass(quantity) {
+            return quantity < 10 ? 'text-red-600' : 'text-green-600';
+        }
+
         // Global function to delete from modal (used in show-content.blade.php)
         function deleteFromModal(productId) {
             if (!confirm('Tem certeza que deseja excluir este produto? Esta ação não pode ser desfeita.')) {
@@ -196,7 +212,7 @@
                             <button onclick="updateQuantity(${produto.id}, -1)" class="flex items-center justify-center w-7 h-7 bg-red-500 hover:bg-red-600 text-white rounded transition duration-150 font-bold text-sm">
                                 −
                             </button>
-                            <span id="quantity-${produto.id}" class="text-sm font-semibold ${produto.quantidade < 10 ? 'text-red-600' : 'text-green-600'} min-w-[30px] text-center">
+                            <span id="quantity-${produto.id}" class="text-sm font-semibold ${getQuantityColorClass(produto.quantidade)} min-w-[30px] text-center">
                                 ${produto.quantidade}
                             </span>
                             <button onclick="updateQuantity(${produto.id}, 1)" class="flex items-center justify-center w-7 h-7 bg-green-500 hover:bg-green-600 text-white rounded transition duration-150 font-bold text-sm">
@@ -205,12 +221,7 @@
                         </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        ${produto.quantidade === 0
-                            ? '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Esgotado</span>'
-                            : produto.quantidade < 10 
-                                ? '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Estoque Baixo</span>'
-                                : '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Em Estoque</span>'
-                        }
+                        ${getStockStatusHtml(produto.quantidade)}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div class="flex gap-2">
@@ -279,16 +290,12 @@
 
             // Optimistic UI update
             quantitySpan.textContent = newQuantity;
-            quantitySpan.className = `text-sm font-semibold ${newQuantity < 10 ? 'text-red-600' : 'text-green-600'} min-w-[30px] text-center`;
+            quantitySpan.className = `text-sm font-semibold ${getQuantityColorClass(newQuantity)} min-w-[30px] text-center`;
 
             // Update status badge in the same row
             const row = quantitySpan.closest('tr');
             const statusCell = row.cells[5]; // Status column is the 6th cell (index 5)
-            statusCell.innerHTML = newQuantity === 0
-                ? '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Esgotado</span>'
-                : newQuantity < 10 
-                    ? '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Estoque Baixo</span>'
-                    : '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Em Estoque</span>';
+            statusCell.innerHTML = getStockStatusHtml(newQuantity);
 
             // Send update to server
             fetch(`/produtos/${produtoId}/quantidade`, {
@@ -308,12 +315,8 @@
                 if (!data.success) {
                     // Revert on error
                     quantitySpan.textContent = currentQuantity;
-                    quantitySpan.className = `text-sm font-semibold ${currentQuantity < 10 ? 'text-red-600' : 'text-green-600'} min-w-[30px] text-center`;
-                    statusCell.innerHTML = currentQuantity === 0
-                        ? '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Esgotado</span>'
-                        : currentQuantity < 10 
-                            ? '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Estoque Baixo</span>'
-                            : '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Em Estoque</span>';
+                    quantitySpan.className = `text-sm font-semibold ${getQuantityColorClass(currentQuantity)} min-w-[30px] text-center`;
+                    statusCell.innerHTML = getStockStatusHtml(currentQuantity);
                     showError(data.message || 'Erro ao atualizar quantidade.');
                 }
             })
@@ -321,12 +324,8 @@
                 console.error('Error:', error);
                 // Revert on error
                 quantitySpan.textContent = currentQuantity;
-                quantitySpan.className = `text-sm font-semibold ${currentQuantity < 10 ? 'text-red-600' : 'text-green-600'} min-w-[30px] text-center`;
-                statusCell.innerHTML = currentQuantity === 0
-                    ? '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Esgotado</span>'
-                    : currentQuantity < 10 
-                        ? '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Estoque Baixo</span>'
-                        : '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Em Estoque</span>';
+                quantitySpan.className = `text-sm font-semibold ${getQuantityColorClass(currentQuantity)} min-w-[30px] text-center`;
+                statusCell.innerHTML = getStockStatusHtml(currentQuantity);
                 showError('Erro ao atualizar quantidade.');
             });
         }
