@@ -194,7 +194,7 @@
                         <div class="text-sm font-medium text-gray-900">${escapeHtml(produto.nome)}</div>
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
-                        ${escapeHtml(produto.descricao.substring(0, 50))}${produto.descricao.length > 50 ? '...' : ''}
+                        ${produto.descricao ? escapeHtml(produto.descricao.substring(0, 50)) + (produto.descricao.length > 50 ? '...' : '') : ''}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="text-sm font-semibold text-green-600">
