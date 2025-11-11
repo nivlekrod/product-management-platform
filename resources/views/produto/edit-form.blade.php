@@ -145,7 +145,7 @@
         
         <button 
             type="button"
-            onclick="closeEditModal()"
+            onclick="if (typeof closeEditModal === 'function') { closeEditModal(); } else { window.location.href = '{{ route('produto.index') }}'; }"
             class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-2"
         >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
