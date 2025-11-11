@@ -1,5 +1,5 @@
 <!-- Edit Product Modal usando componente reutilizável -->
-<x-modal id="editProductModal" title="Editar Produto" max-width="4xl" top-offset="20" />
+<x-modal id="editProductModal" title="Editar Produto" max-width="4xl" top-offset="10" />
 
 <script>
     let currentEditProductId = null;
