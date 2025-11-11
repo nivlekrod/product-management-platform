@@ -150,7 +150,53 @@
         // Load products on page load
         document.addEventListener('DOMContentLoaded', function() {
             loadProdutos();
+            
+            // Check URL on page load to open modal if needed
+            checkUrlAndOpenModal();
         });
+        
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', function(event) {
+            checkUrlAndOpenModal();
+        });
+        
+        // Function to check URL and open appropriate modal
+        function checkUrlAndOpenModal() {
+            const path = window.location.pathname;
+            const match = path.match(/^\/produtos\/(\d+)$/);
+            
+            if (match) {
+                const productId = match[1];
+                const state = history.state;
+                
+                // Close all modals first
+                closeAllModals();
+                
+                // Open the appropriate modal based on state or default to show
+                if (state && state.modal === 'edit') {
+                    openEditModal(productId);
+                } else {
+                    openShowModal(productId);
+                }
+            } else if (path === '/produtos/create') {
+                closeAllModals();
+                openCreateModal();
+            } else {
+                // Close all modals if we're on /produtos
+                closeAllModals();
+            }
+        }
+        
+        // Function to close all modals without updating URL
+        function closeAllModals() {
+            const editModal = document.getElementById('editProductModal');
+            const showModal = document.getElementById('showProductModal');
+            const createModal = document.getElementById('createProductModal');
+            
+            if (editModal) editModal.classList.add('hidden');
+            if (showModal) showModal.classList.add('hidden');
+            if (createModal) createModal.classList.add('hidden');
+        }
 
         // Function to load produtos via AJAX
         function loadProdutos() {

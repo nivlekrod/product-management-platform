@@ -38,6 +38,9 @@
         
         modal.classList.remove('hidden');
         
+        // Update URL
+        history.pushState({ modal: 'show', productId: productId }, '', `/produtos/${productId}`);
+        
         // Fetch product data
         fetch(`/produtos/${productId}`, {
             headers: {
@@ -63,6 +66,9 @@
         // Don't reset currentShowProductId if we're opening edit modal
         if (typeof editOpenedFromShow === 'undefined' || !editOpenedFromShow) {
             currentShowProductId = null;
+            
+            // Restore URL to produtos list
+            history.pushState({ modal: null }, '', '/produtos');
         }
     }
 

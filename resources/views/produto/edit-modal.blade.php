@@ -30,6 +30,9 @@
         const modal = document.getElementById('editProductModal');
         const modalContent = document.getElementById('editModalContent');
         
+        // Update URL
+        history.pushState({ modal: 'edit', productId: productId }, '', `/produtos/${productId}/edit`);
+        
         // Clear previous content and show loading
         modalContent.innerHTML = `
             <div class="flex justify-center items-center py-12">
@@ -68,6 +71,9 @@
             console.log('Reopening show modal for product:', currentShowProductId);
             openShowModal(currentShowProductId);
         } else {
+            // Return to produtos list URL
+            history.pushState({}, '', '/produtos');
+            
             // Only reset currentShowProductId if we're not reopening show modal
             if (typeof currentShowProductId !== 'undefined') {
                 currentShowProductId = null;

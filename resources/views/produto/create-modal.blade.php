@@ -28,6 +28,9 @@
         
         modal.classList.remove('hidden');
         
+        // Update URL
+        history.pushState({ modal: 'create' }, '', '/produtos/create');
+        
         // Fetch create form
         fetch('/produtos/create', {
             headers: {
@@ -50,6 +53,9 @@
 
     function closeCreateModal() {
         document.getElementById('createProductModal').classList.add('hidden');
+        
+        // Restore URL to produtos list
+        history.pushState({ modal: null }, '', '/produtos');
     }
 
     // Close modal when clicking outside
